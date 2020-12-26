@@ -18,6 +18,7 @@ cc_defaults {
         "-Wall",
         "-Wextra",
         "-Werror",
+        "-Wno-unused-parameter",
     ],
     shared_libs: [
         "libhidlbase",

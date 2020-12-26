@@ -38,10 +38,11 @@ using android::FQName;
 
 AccessControl::AccessControl() {
     mSeHandle = selinux_android_hw_service_context_handle();
-    LOG_ALWAYS_FATAL_IF(mSeHandle == nullptr, "Failed to acquire SELinux handle.");
+    // Disabled in Halium
+    /*LOG_ALWAYS_FATAL_IF(mSeHandle == nullptr, "Failed to acquire SELinux handle.");*/
 
     if (getcon(&mSeContext) != 0) {
-        LOG_ALWAYS_FATAL("Failed to acquire hwservicemanager context.");
+        /*LOG_ALWAYS_FATAL("Failed to acquire hwservicemanager context.");*/
     }
 
     selinux_status_open(true);
@@ -104,8 +105,8 @@ bool AccessControl::checkPermission(const CallingContext& source, const char *ta
     ad.sid = source.sid.c_str();
     ad.interfaceName = interface;
 
-    allowed = (selinux_check_access(source.sid.c_str(), targetContext, "hwservice_manager",
-                                    perm, (void *) &ad) == 0);
+    allowed = true; /*(selinux_check_access(source.sid.c_str(), targetContext, "hwservice_manager",
+                                    perm, (void *) &ad) == 0);*/
 
     return allowed;
 }
@@ -115,10 +116,10 @@ bool AccessControl::checkPermission(const CallingContext& source, const char *pe
     bool allowed = false;
 
     // Lookup service in hwservice_contexts
-    if (selabel_lookup(mSeHandle, &targetContext, interface, 0) != 0) {
+    /*if (selabel_lookup(mSeHandle, &targetContext, interface, 0) != 0) {
         ALOGE("No match for interface %s in hwservice_contexts", interface);
         return false;
-    }
+    }*/
 
     allowed = checkPermission(source, targetContext, perm, interface);
 

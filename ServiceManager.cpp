@@ -40,7 +40,7 @@ AccessControl::CallingContext getBinderCallingContext() {
     const auto& self = IPCThreadState::self();
 
     pid_t pid = self->getCallingPid();
-    const char* sid = self->getCallingSid();
+    const char* sid = ""; /*self->getCallingSid();*/
 
     if (sid == nullptr) {
         if (pid != getpid()) {
